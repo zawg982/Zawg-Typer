@@ -2,54 +2,43 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Typing Flux</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
-  <div id="app">
-
-    <!-- Home Screen -->
-    <section id="homeScreen" class="screen active">
-      <h1>Typing Flux</h1>
-      <label for="modeSelect">Select Game Mode:</label>
-      <select id="modeSelect">
+  <div id="homeScreen" class="screen">
+    <h1>Typing Flux</h1>
+    <div class="selector">
+      <label>Select Game Mode:</label>
+      <select id="gameMode">
         <option value="classic">Classic</option>
         <option value="mutation">Mutation</option>
-        <option value="boss">Boss</option>
+        <option value="boss">Boss Mode</option>
       </select>
-      <button id="playBtn" class="btn">Play</button>
-      <button id="patchBtn" class="btn secondary">Patch Notes</button>
-    </section>
-
-    <!-- Patch Notes -->
-    <section id="patchNotes" class="screen hidden">
+    </div>
+    <button id="playBtn">Play</button>
+    <button id="patchNotesBtn">Patch Notes</button>
+    <div id="patchNotes" class="hidden">
       <h2>Patch Notes</h2>
-      <div id="patchContent">
-        <ul>
-          <li>v1.0 — Initial release: Classic typing mode.</li>
-          <li>v1.1 — Added Mutation mode: words mutate mid-fall.</li>
-          <li>v1.2 — Added Boss mode: type segments of a boss word to defeat it.</li>
-          <li>v1.3 — Improved UI with smooth animations and real-time feedback.</li>
-          <li>v1.4 — Added power-ups and combo system.</li>
-        </ul>
-      </div>
-      <button id="backFromPatch" class="btn secondary">Back</button>
-    </section>
-
-    <!-- Game Screen -->
-    <section id="gameScreen" class="screen hidden">
-      <div id="scoreBoard">
-        Score: <span id="score">0</span> | Time: <span id="timer">60</span>s
-      </div>
-      <div id="wordArea"></div>
-      <input type="text" id="inputBox" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-      <button id="quitBtn" class="btn secondary">Quit</button>
-    </section>
-
+      <ul>
+        <li>🎮 Game modes: Classic, Mutation, Boss</li>
+        <li>🧠 Mutating words challenge your reflexes</li>
+        <li>🔥 Boss mode: giant words to defeat</li>
+      </ul>
+    </div>
   </div>
 
-  <script src="script.js"></script>
+  <div id="gameScreen" class="screen hidden">
+    <div id="topBar">
+      <span id="scoreDisplay">Score: 0</span>
+      <span id="streakDisplay">Streak: 0</span>
+      <button id="backBtn">Home</button>
+    </div>
+    <div id="wordContainer"></div>
+    <input id="inputBox" type="text" autocomplete="off" placeholder="Type here..." />
+  </div>
+
+  <script src="main.js"></script>
 </body>
 </html>
