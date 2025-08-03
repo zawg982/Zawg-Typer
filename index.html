@@ -2,41 +2,37 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Typing Flux</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div id="homeScreen" class="screen">
+  <div id="homeScreen" class="screen active">
     <h1>Typing Flux</h1>
-    <div class="selector">
-      <label>Select Game Mode:</label>
-      <select id="gameMode">
-        <option value="classic">Classic</option>
-        <option value="mutation">Mutation</option>
-        <option value="boss">Boss Mode</option>
-      </select>
-    </div>
+    <select id="modeSelect">
+      <option value="classic">Classic</option>
+      <option value="mutation">Mutation</option>
+    </select>
     <button id="playBtn">Play</button>
-    <button id="patchNotesBtn">Patch Notes</button>
-    <div id="patchNotes" class="hidden">
-      <h2>Patch Notes</h2>
+    <div class="patch-notes">
+      <h3>Patch Notes</h3>
       <ul>
-        <li>🎮 Game modes: Classic, Mutation, Boss</li>
-        <li>🧠 Mutating words challenge your reflexes</li>
-        <li>🔥 Boss mode: giant words to defeat</li>
+        <li>✓ Fixed Mutation mode suffix check</li>
+        <li>✓ Full UI revamp</li>
+        <li>✓ Game mode selector</li>
+        <li>✓ Console debugging added</li>
       </ul>
     </div>
   </div>
 
-  <div id="gameScreen" class="screen hidden">
-    <div id="topBar">
-      <span id="scoreDisplay">Score: 0</span>
-      <span id="streakDisplay">Streak: 0</span>
-      <button id="backBtn">Home</button>
+  <div id="gameScreen" class="screen">
+    <div class="hud">
+      <div>Score: <span id="score">0</span></div>
+      <div>Time: <span id="time">60</span>s</div>
     </div>
-    <div id="wordContainer"></div>
-    <input id="inputBox" type="text" autocomplete="off" placeholder="Type here..." />
+    <div id="wordBox"></div>
+    <input id="inputBox" type="text" placeholder="Type here..." autofocus />
+    <button id="backBtn">Back to Menu</button>
   </div>
 
   <script src="main.js"></script>
