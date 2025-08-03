@@ -1,12 +1,12 @@
-/* Reset & basics */
 * {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
 }
 
 body {
-  margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  background: #0e1f3f;
   color: #e0f7ff;
   display: flex;
   justify-content: center;
@@ -15,142 +15,71 @@ body {
   padding: 20px;
 }
 
-#app {
-  background: rgba(0, 0, 0, 0.45);
-  border-radius: 16px;
-  padding: 30px 40px;
-  width: 400px;
-  max-width: 95vw;
-  box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
-}
-
 .screen {
-  display: none;
-}
-
-.screen.active {
-  display: block;
-  animation: fadeIn 0.5s ease forwards;
-}
-
-.hidden {
-  display: none !important;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 30px;
+  max-width: 500px;
+  width: 100%;
+  backdrop-filter: blur(8px);
 }
 
 h1, h2 {
-  text-align: center;
   margin-bottom: 20px;
 }
 
-label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 600;
-}
-
-select {
-  width: 100%;
+button, select, input {
   padding: 10px;
-  border-radius: 10px;
-  border: none;
-  font-size: 1.1em;
-  margin-bottom: 20px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #e0f7ff;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-select:hover, select:focus {
-  background: rgba(255, 255, 255, 0.2);
-  outline: none;
-}
-
-.btn {
-  width: 100%;
-  padding: 12px;
-  font-size: 1.2em;
+  margin: 10px 0;
   border-radius: 12px;
   border: none;
   background: #00ffff;
-  color: #001f3f;
-  font-weight: 700;
+  color: #002233;
+  font-weight: bold;
   cursor: pointer;
-  transition: background 0.3s, transform 0.15s;
-  margin-bottom: 15px;
+  transition: background 0.2s, transform 0.2s;
 }
 
-.btn:hover {
-  background: #00cfcf;
+button:hover, select:hover {
+  background: #00e5e5;
   transform: scale(1.05);
 }
 
-.btn:active {
-  transform: scale(0.95);
+input {
+  width: 80%;
+  margin-top: 20px;
 }
 
-.btn.secondary {
-  background: transparent;
-  border: 2px solid #00ffff;
-  color: #00ffff;
-  margin-bottom: 0;
+.hidden {
+  display: none;
 }
 
-.btn.secondary:hover {
-  background: #00ffff;
-  color: #001f3f;
+#topBar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
 
-#patchContent {
-  max-height: 200px;
-  overflow-y: auto;
-  padding-right: 10px;
-  font-size: 0.9em;
-  line-height: 1.4;
-  margin-bottom: 20px;
-  color: #b3e5fc;
+#wordContainer {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+  margin: 20px 0;
 }
 
-#scoreBoard {
-  font-size: 1.2em;
-  margin-bottom: 20px;
-  text-align: center;
-  font-weight: 600;
+.word {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  animation: fall 5s linear forwards;
 }
 
-#wordArea {
-  min-height: 60px;
-  margin-bottom: 20px;
-  font-size: 2em;
-  font-weight: 700;
-  text-align: center;
-  user-select: none;
-  letter-spacing: 4px;
-  color: #00ffff;
-  font-family: monospace;
-}
-
-#inputBox {
-  width: 100%;
-  font-size: 1.4em;
-  padding: 12px 15px;
-  border-radius: 12px;
-  border: none;
-  outline: none;
-  color: #001f3f;
-  font-weight: 700;
-  font-family: monospace;
-}
-
-#inputBox.correct {
-  background-color: #b2ffb2;
-}
-
-#inputBox.incorrect {
-  background-color: #ffb2b2;
-}
-
-@keyframes fadeIn {
-  from {opacity: 0;}
-  to {opacity: 1;}
+@keyframes fall {
+  to {
+    top: 100%;
+    opacity: 0;
+  }
 }
