@@ -12,6 +12,9 @@ const streakDisplay = document.getElementById("streakDisplay");
 const modeSelect = document.getElementById("gameMode");
 
 let gameInterval;
+let timeLimit = 60;
+let timeLeft = 60;
+let timer;
 let words = ["flux", "type", "burst", "shift", "glitch", "level", "code", "boss", "node", "quick"];
 let activeWords = [];
 let score = 0;
@@ -29,30 +32,68 @@ function startGame() {
 
   score = 0;
   streak = 0;
+  timeLeft = timeLimit;
   updateHUD();
+
+  clearInterval(gameInterval);
+  clearInterval(timer);
+  activeWords.forEach(w => w.el.remove());
+  activeWords = [];
+
+  if (currentMode === "timerush") {
+    timer = setInterval(() => {
+      timeLeft--;
+      if (timeLeft <= 0) {
+        endGame();
+      }
+    }, 1000);
+  }
 
   spawnWord();
   gameInterval = setInterval(spawnWord, 3000);
 }
 
+function endGame() {
+  clearInterval(gameInterval);
+  clearInterval(timer);
+  inputBox.disabled = true;
+  console.log("[Game Ended] Final score:", score);
+  alert("Game Over! Final Score: " + score);
+}
+
 function spawnWord() {
-  let wordText = currentMode === "boss" ? randomBossWord() : randomWord();
+  const original = currentMode === "boss" ? randomBossWord() : randomWord();
+  let display = original;
+
+  if (currentMode === "mutation") {
+    display = mutateWord(original);
+    if (display !== original) {
+      console.log(`[Mutated] Display: ${display}, Original: ${original}`);
+    }
+  }
+
+  if (currentMode === "reverse") {
+    display = original.split("").reverse().join("");
+    console.log(`[Reverse] Display: ${display}, Original: ${original}`);
+  }
+
   const span = document.createElement("span");
   span.className = "word";
-  span.textContent = wordText;
-  span.dataset.word = wordText;
+  span.textContent = display;
+  span.dataset.word = original;
   span.style.left = Math.random() * 80 + "%";
 
   wordContainer.appendChild(span);
-  activeWords.push(span);
+  activeWords.push({ el: span, original });
 
-  console.log(`[Word Spawned] ${wordText}`);
+  console.log(`[Spawned] ${display} (${original})`);
 
   setTimeout(() => {
-    if (activeWords.includes(span)) {
-      console.warn(`[Word Missed] ${span.dataset.word}`);
+    const index = activeWords.findIndex(w => w.el === span);
+    if (index !== -1) {
       span.remove();
-      activeWords = activeWords.filter(w => w !== span);
+      activeWords.splice(index, 1);
+      console.warn(`[Missed] ${original}`);
       streak = 0;
       updateHUD();
     }
@@ -60,15 +101,7 @@ function spawnWord() {
 }
 
 function randomWord() {
-  let word = words[Math.floor(Math.random() * words.length)];
-  let mutated = word;
-  if (currentMode === "mutation") {
-    mutated = mutateWord(word);
-    if (mutated !== word) {
-      console.log(`[Mutated Word] Original: ${word}, Mutated: ${mutated}`);
-    }
-  }
-  return mutated;
+  return words[Math.floor(Math.random() * words.length)];
 }
 
 function mutateWord(word) {
@@ -84,25 +117,28 @@ function mutateWord(word) {
 }
 
 function randomBossWord() {
-  const bossWords = ["unstoppable", "fragmentation", "psychological", "implementation"];
+  const bossWords = ["implementation", "psychological", "fragmentation", "resilience"];
   const word = bossWords[Math.floor(Math.random() * bossWords.length)];
-  console.log(`[Boss Word Spawned] ${word}`);
+  console.log(`[Boss Word] ${word}`);
   return word;
 }
 
 function updateHUD() {
   scoreDisplay.textContent = `Score: ${score}`;
   streakDisplay.textContent = `Streak: ${streak}`;
-  console.log(`[Update HUD] Score: ${score}, Streak: ${streak}`);
+  if (currentMode === "timerush") {
+    streakDisplay.textContent += ` | Time: ${timeLeft}s`;
+  }
+  console.log(`[HUD] Score: ${score}, Streak: ${streak}, Time: ${timeLeft}`);
 }
 
 inputBox.addEventListener("input", () => {
   const typed = inputBox.value.trim().toLowerCase();
-  for (const wordEl of activeWords) {
-    if (wordEl.dataset.word === typed) {
-      console.log(`[Typed Correctly] ${typed}`);
-      wordEl.remove();
-      activeWords = activeWords.filter(w => w !== wordEl);
+  for (const w of activeWords) {
+    if (typed === w.original.toLowerCase()) {
+      console.log(`[Correct] Typed: ${typed}`);
+      w.el.remove();
+      activeWords = activeWords.filter(x => x !== w);
       score += 10;
       streak += 1;
       updateHUD();
@@ -113,21 +149,24 @@ inputBox.addEventListener("input", () => {
 });
 
 playBtn.onclick = () => {
-  console.log("[Button Clicked] Play");
+  console.log("[Button] Play");
+  inputBox.disabled = false;
   startGame();
 };
 
 backBtn.onclick = () => {
-  console.log("[Button Clicked] Back to Home");
+  console.log("[Button] Back to Home");
   clearInterval(gameInterval);
-  activeWords.forEach(w => w.remove());
+  clearInterval(timer);
+  activeWords.forEach(w => w.el.remove());
   activeWords = [];
   inputBox.value = "";
+  inputBox.disabled = false;
   gameScreen.classList.add("hidden");
   homeScreen.classList.remove("hidden");
 };
 
 patchBtn.onclick = () => {
   patchNotes.classList.toggle("hidden");
-  console.log("[Button Clicked] Patch Notes Toggle:", !patchNotes.classList.contains("hidden"));
+  console.log("[Button] Toggle Patch Notes:", !patchNotes.classList.contains("hidden"));
 };
