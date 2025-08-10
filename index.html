@@ -1,38 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Typing Flux</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ZWX Designer — Pro</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div id="homeScreen" class="screen active">
-    <h1>Typing Flux</h1>
-    <select id="modeSelect">
-      <option value="classic">Classic</option>
-      <option value="mutation">Mutation</option>
-    </select>
-    <button id="playBtn">Play</button>
-    <div class="patch-notes">
-      <h3>Patch Notes</h3>
-      <ul>
-        <li>✓ Fixed Mutation mode suffix check</li>
-        <li>✓ Full UI revamp</li>
-        <li>✓ Game mode selector</li>
-        <li>✓ Console debugging added</li>
-      </ul>
+  <header class="topbar">
+    <div class="brand">ZWX Designer</div>
+    <div class="top-actions">
+      <button id="undoBtn" title="Undo (Ctrl+Z)">Undo</button>
+      <button id="redoBtn" title="Redo (Ctrl+Y)">Redo</button>
+      <button id="saveBtn" title="Save to local">Save</button>
+      <button id="loadBtn" title="Load from local">Load</button>
+      <button id="exportBtn" title="Export HTML/CSS">Export</button>
+      <button id="previewBtn" title="Preview (new tab)">Preview</button>
     </div>
-  </div>
+  </header>
 
-  <div id="gameScreen" class="screen">
-    <div class="hud">
-      <div>Score: <span id="score">0</span></div>
-      <div>Time: <span id="time">60</span>s</div>
-    </div>
-    <div id="wordBox"></div>
-    <input id="inputBox" type="text" placeholder="Type here..." autofocus />
-    <button id="backBtn">Back to Menu</button>
+  <div id="app">
+    <!-- Left toolbar -->
+    <aside class="sidebar left">
+      <div class="panel-title">Tools</div>
+      <div class="tool-grid">
+        <button class="tool" data-tool="select">Select</button>
+        <button class="tool" data-tool="rect">Rectangle</button>
+        <button class="tool" data-tool="circle">Circle</button>
+        <button class="tool" data-tool="text">Text</button>
+        <button class="tool" data-tool="image">Image</button>
+        <button class="tool" data-tool="polygon">Polygon</button>
+        <button class="tool" data-tool="path">Custom Path</button>
+        <button class="tool" id="gridToggle">Toggle Grid</button>
+        <button class="tool" id="snapToggle">Snap: Off</button>
+      </div>
+
+      <div class="panel-title">Quick Actions</div>
+      <div class="quick-actions">
+        <button id="duplicateBtn">Duplicate (Ctrl+D)</button>
+        <button id="deleteBtn">Delete</button>
+        <button id="bringFwd">Bring Forward</button>
+        <button id="sendBack">Send Back</button>
+      </div>
+    </aside>
+
+    <!-- Workspace center -->
+    <main class="workspace-shell">
+      <div id="workspaceWrap">
+        <div id="rulers">
+          <div id="rulerX"></div>
+          <div id="rulerY"></div>
+        </div>
+
+        <div id="workspace" tabindex="0" aria-label="Design workspace">
+          <!-- elements will be appended here -->
+          <div id="grid"></div>
+        </div>
+      </div>
+      <footer class="statusbar">
+        <div id="status">No selection</div>
+        <div id="info">Elements: <span id="elCount">0</span></div>
+      </footer>
+    </main>
+
+    <!-- Right properties + layers -->
+    <aside class="sidebar right">
+      <div class="panel-title">Properties</div>
+      <div id="properties">
+        <div class="prop-row"><label>ID</label><input id="propId" readonly /></div>
+        <div class="prop-row"><label>Type</label><input id="propType" readonly /></div>
+
+        <div class="prop-row">
+          <label>X</label><input id="propX" type="number" />
+          <label>Y</label><input id="propY" type="number" />
+        </div>
+
+        <div class="prop-row">
+          <label>W</label><input id="propW" type="number" />
+          <label>H</label><input id="propH" type="number" />
+        </div>
+
+        <div class="prop-row">
+          <label>Rotate</label><input id="propRot" type="number" step="1" />
+        </div>
+
+        <div class="prop-row">
+          <label>Fill</label><input id="propFill" type="color" />
+          <label>Outline</label><input id="propStroke" type="color" />
+        </div>
+
+        <div class="prop-row">
+          <label>Stroke W</label><input id="propStrokeW" type="number" min="0" />
+          <label>Opacity</label><input id="propOpacity" type="number" min="0" max="1" step="0.05" />
+        </div>
+
+        <div class="prop-row" id="textControls" style="display:none;">
+          <label>Font</label><input id="propFont" type="text" />
+          <label>Size</label><input id="propFontSize" type="number" />
+          <label>Align</label>
+          <select id="propTextAlign"><option>left</option><option>center</option><option>right</option></select>
+        </div>
+
+        <div class="prop-row" id="polygonControls" style="display:none;">
+          <label>Sides</label><input id="propSides" type="number" min="3" max="12" />
+          <label>Radius</label><input id="propRadius" type="number" />
+        </div>
+
+        <div class="prop-actions">
+          <button id="applyProps">Apply</button>
+          <button id="lockToggle">Lock</button>
+        </div>
+      </div>
+
+      <div class="panel-title">Layers</div>
+      <div id="layers"></div>
+
+    </aside>
   </div>
 
   <script src="main.js"></script>
